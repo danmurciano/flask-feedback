@@ -1,0 +1,36 @@
+.page {
+  margin: 40px auto;
+  max-width: 800px;
+}
+
+.navbar {
+  background-color: #4287f5;
+  padding: 12px 30px;
+}
+
+p {
+  font-size: 16px;
+}
+
+.feedbacks {
+  margin: 60px 0;
+}
+
+.feedbacks li {
+  margin: 16px auto;
+}
+
+.add-feedback-btn {
+  background-color: #63c294;
+  color: white;
+}
+
+.add-feedback-btn:hover {
+  background-color: #54a17c;
+  color: white;
+}
+
+
+a {
+  text-decoration: none;
+}

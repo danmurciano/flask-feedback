@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <h1> {{user.first_name}} {{user.last_name}} </h1>
+  <p> Username: {{user.username}} </p>
+  <p> Email: {{user.email}} </p>
+
+  <form>
+    <button class="btn btn-secondary" formaction="/users/{{user.username}}/delete" formmethod="POST">
+      Delete Account
+    </button>
+  </form>
+
+  <div class="feedbacks">
+    {% if user.feedback %}
+      <h3>Feedbacks</h3>
+      <ul>
+        {% for feedback in user.feedback %}
+          <li >
+            <b> {{feedback.title}} </b> - {{feedback.content}}
+            <form style="display:inline">
+              {{form.hidden_tag()}}
+              <button class="btn btn-primary btn-sm" formaction="/feedback/{{feedback.id}}/update" formmethod="GET"> Edit </button>
+              <button class="btn btn-danger btn-sm" formaction="/feedback/{{feedback.id}}/delete" formmethod="POST"> Delete </button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h3>No feedbacks yet</h3>
+    {% endif %}
+
+    <p> <a href="/users/{{user.username}}/feedback/new" class="btn add-feedback-btn"> Add feedback </a> </p>
+  </div>
+
+{% endblock %}
