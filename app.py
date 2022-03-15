@@ -1,15 +1,15 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from werkzeug.exceptions import Unauthorized
 from models import connect_db, db, User, Feedback
 from forms import RegisterForm, LoginForm, FeedbackForm, DeleteForm
+import os
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///flask-feedback"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "postgresql:///flask-feedback")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "shhhhh"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "58fd32s")
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 
 toolbar = DebugToolbarExtension(app)
@@ -41,9 +41,8 @@ def register():
 
         user = User.register(username, password, email, first_name, last_name)
         db.session.commit()
-        flash("Welcome! Your account has been created.")
         session['username'] = user.username
-
+        flash("Welcome! Your account has been created.")
         return redirect(f"/users/{user.username}")
 
     else:
@@ -75,8 +74,8 @@ def login():
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
-    flash("Successfully logged out.")
     session.pop("username")
+    flash("Successfully logged out.")
     return redirect("/login")
 
 
@@ -99,9 +98,9 @@ def remove_user(username):
     user = User.query.get(username)
     db.session.delete(user)
     db.session.commit()
-    
-    flash("Successfully deleted account.")
+
     session.pop("username")
+    flash("Successfully deleted account.")
 
     return redirect("/login")
 
