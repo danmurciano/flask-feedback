@@ -6,10 +6,14 @@ import os
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "postgresql:///flask-feedback")
+uri = os.getenv("DATABASE_URL")
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+    
+app.config["SQLALCHEMY_DATABASE_URI"] = uri if uri else "postgresql:///flask-feedback"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "58fd32s")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "58fd32s")
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = False
 
 toolbar = DebugToolbarExtension(app)
